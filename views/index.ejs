@@ -1,5 +1,22 @@
-<div>Hello <%= name %></div>
+<%- include('./partials/head', {title: 'Inventory - Home', background: ''}); %>
 
-<form action="/logout?_method=DELETE" method="POST">
-    <button type="submit">Log Out</button>
-</form>
+<div class="container">
+
+    <div class=bmb-2">Hello <%= name %></div>
+
+    <svg class="barcode"
+        jsbarcode-format="code128"
+        jsbarcode-value="<%= name %>"
+        jsbarcode-textmargin="0"
+        jsbarcode-fontoptions="bold">
+    </svg>
+
+    <form action="/logout?_method=DELETE" method="POST">
+        <button class="btn btn-primary" type="submit">Log Out</button>
+    </form>
+
+</div>
+
+
+
+<%- include('./partials/foot'); %>

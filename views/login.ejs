@@ -1,21 +1,45 @@
-<h1>Login</h1>
+<%- include('./partials/head', {title: 'Inventory - Login', background: 'inventory-wp.jpg'}); %>
 
-<% if (messages.error) { %>
-    <%= messages.error %>
-<% } %>    
+<div class="container-fluid position-relative min-vh-100"
+    style="display: grid; grid-template-columns: 2fr 1fr;"
+>
 
-<form action="/login" method="post">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+    <div></div>
+
+    <div class="position-relative">
+        
+        <div class="card shadow m-4 position-absolute top-50 start-0 translate-middle w-75">
+            <div class="card-body">
+                <h3 class="card-title text-center">Sign In</h3>
+
+                <% if (messages.error) { %>
+                    <div><%= messages.error %></div>
+                <% } %> 
+
+                <form action="/login" method="post" class="p-4">
+
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
+                        <label for="email">Email address</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+
+                    <button class="btn btn-primary mt-4 px-3" type="submit">Login</button>
+
+                </form>
+
+                <a href="/register" class="px-4">Register</a>
+            </div>
+        </div>
+
     </div>
 
-    <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-    </div>
 
-    <button type="submit">Login</button>
-</form>
+</div>
 
-<a href="/register">Register</a>
+
+<%- include('./partials/foot'); %>

@@ -34,6 +34,8 @@ app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+
+//Routes
 app.get('/', checkAuthenticated, (req, res) => {
     res.render('index.ejs', {name: req.user.name})
 });
@@ -73,6 +75,9 @@ app.delete('/logout', (req, res, next) => {
         res.redirect('/login');
     });
 })
+
+//Static route
+app.use(express.static(path.join(__dirname, 'public')));
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) return next();
