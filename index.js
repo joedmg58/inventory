@@ -37,7 +37,28 @@ app.set('view engine', 'ejs');
 
 //Routes
 app.get('/', checkAuthenticated, (req, res) => {
-    res.render('index.ejs', {name: req.user.name})
+    // res.render('index.ejs', {name: req.user.name});
+    res.render('home.ejs', {title: 'KA Demo Inventory - Home', name: req.user.name})
+});
+
+app.get('/inventory', checkAuthenticated, (req, res) => {
+    res.render('inventory.ejs', {title: 'KA Demo Inventory - Inventory', name: req.user.name})
+});
+
+app.get('/items', checkAuthenticated, (req, res) => {
+    res.render('items.ejs', {title: 'KA Demo Inventory - Items', name: req.user.name})
+});
+
+app.get('/attributes', checkAuthenticated, (req, res) => {
+    res.render('attributes.ejs', {title: 'KA Demo Inventory - Attibutes', name: req.user.name})
+});
+
+app.get('/users', checkAuthenticated, (req, res) => {
+    res.render('users.ejs', {title: 'KA Demo Inventory - Users', name: req.user.name})
+});
+
+app.get('/help', checkAuthenticated, (req, res) => {
+    res.render('help.ejs', {title: 'KA Demo Inventory - Help', name: req.user.name})
 });
 
 app.get('/login', checkNotAuthenticated, (req, res) => {

@@ -1,0 +1,39 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+
+:root {
+    --colorBlue: #263686;
+    --colorWhite: #fff;
+    --sideBarWidth: 300px;
+    --topBarHeight: 60px;
+}
+
+.side-bar {
+    position: fixed;
+    width: var(--sideBarWidth);
+    height: 100vh;
+    background: var(--colorBlue);
+    overflow: hidden;
+    border-left: 10px solid var(--colorBlue);
+}
+
+.menu-icon, 
+.menu-text {
+    font-size: 1.2rem;
+}
+
+.top-bar {
+    position: fixed;
+    width: calc(100% - var(--sideBarWidth));
+    left: var(--sideBarWidth);
+    height: var(--topBarHeight);
+    display:flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.main {
+    position: relative;
+    width: calc(100% - var(--sideBarWidth));
+    left: var(--sideBarWidth);
+    top: var(--topBarHeight);
+    padding: 5px;
+}  
