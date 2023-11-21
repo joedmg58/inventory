@@ -1,4 +1,14 @@
-<div class="top-bar px-3 d-flex flex-row justify-content-between">
+<div class="top-bar px-3 d-flex flex-row justify-content-between overflow-hidden">
+   
     <span class="d-flex align-items-center display-6"><i class="bi bi-list"></i></span>
+    
     <div class="d-flex align-items-center"><%= name %></div>
+
+    <svg class="barcode"
+        jsbarcode-format="code128"
+        jsbarcode-value="<%= name %>"
+        jsbarcode-textmargin="0"
+        jsbarcode-fontoptions="bold">
+    </svg>
+
 </div>
