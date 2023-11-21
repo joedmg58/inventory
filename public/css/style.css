@@ -3,17 +3,25 @@
 :root {
     --colorBlue: #263686;
     --colorWhite: #fff;
+    --colorYellowPale: rgb(250, 245, 210);
+    --colorBack1: #222;
     --sideBarWidth: 300px;
+    --sideBarWidthShort: 70px;
     --topBarHeight: 60px;
 }
 
 .side-bar {
     position: fixed;
     width: var(--sideBarWidth);
-    height: 100vh;
+    height: 100%;
     background: var(--colorBlue);
-    overflow: hidden;
     border-left: 10px solid var(--colorBlue);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.side-bar.menu-toggle-active {
+    width: var(--sideBarWidthShort);
 }
 
 .menu-icon, 
@@ -22,18 +30,77 @@
 }
 
 .top-bar {
-    position: fixed;
-    width: calc(100% - var(--sideBarWidth));
-    left: var(--sideBarWidth);
+    /* position: sticky; */
+    width: 100%;
     height: var(--topBarHeight);
-    display:flex;
     border-bottom: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .main {
-    position: relative;
+    position: absolute;
+    background: var(--colorYellowPale);
     width: calc(100% - var(--sideBarWidth));
     left: var(--sideBarWidth);
-    top: var(--topBarHeight);
-    padding: 5px;
+    min-height: 100vh;
+    transition: 0.5s;
 }  
+
+.main.menu-toggle-active {
+    width: calc(100% - var(--sideBarWidthShort));
+    left: var(--sideBarWidthShort);
+}
+
+.nav-link.active {
+    color: var(--colorWhite);
+}
+
+/* ================= Users ==================== */
+
+.users {
+    position: relative;
+    display: grid;
+    min-height: 200px;
+    background: var(--colorWhite);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.users table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.users table thead td {
+    font-weight: 600;
+}
+
+.users table tr {
+    color: var(--colorBlack1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.users table tbody tr:hover {
+    background: var(--colorBlue);
+    color: var(--colorYellowPale);
+}
+
+.users table tbody tr:hover .actions {
+    color: var(--colorYellowPale) !important;
+}
+
+.users table tbody tr .actions {
+    cursor: pointer;
+}
+
+.users table tr:last-child {
+    border-bottom: none;
+}
+
+.users table tr td:last-child {
+    text-align: end;
+}
+
+.users table tr td {
+    padding: 10px;
+}

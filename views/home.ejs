@@ -1,13 +1,19 @@
-<%- include('./partials/head', {title: 'KA Demo Inventory - Home', background: 'inventory-wp.jpg'}); %>
+<%- include('./partials/head', {title: 'KA Demo Inventory - Home'}); %>
     
     <div class="container-fluid p-0 h-100">
 
-        <%- include('./partials/side-bar'); %>
-
-        <%- include('./partials/top-bar'); %>
+        <%- include('./partials/side-bar', {active: 'home'}); %>
 
         <div class="main">
-            <h3>Home</h3>
+
+            <%- include('./partials/top-bar'); %>
+
+            <div class="p-2">
+
+                <h3>Home</h3>
+
+            </div>
+
         </div>
 
     </div>
