@@ -54,7 +54,16 @@ app.get('/attributes', checkAuthenticated, (req, res) => {
 });
 
 app.get('/users', checkAuthenticated, (req, res) => {
-    res.render('users.ejs', {title: 'KA Demo Inventory - Users', name: req.user.name})
+    const users = [
+        {id: 1, name: 'Joed Machado', email: 'joed.machado@kirisunamericas.com', password: '340238032890398'},
+        {id: 2, name: 'Tech Support', email: 'joed.machado@kirisun.com', password: '340238032890398'},
+        {id: 3, name: 'Repairing', email: 'workshop@kirisunamericas.com', password: '340238032890398'},
+        {id: 4, name: 'Maintenance', email: 'handy_man@kirisunamericas.com', password: '340238032890398'},
+    ];
+    db.getUserAll( (error, users) => {
+        if (error) console.log(error);
+        res.render('users.ejs', {title: 'KA Demo Inventory - Users', name: req.user.name, data: users})
+    } );
 });
 
 app.get('/help', checkAuthenticated, (req, res) => {

@@ -11,10 +11,10 @@ toggle.onclick = function() {
     main.classList.toggle('menu-toggle-active');
 }
 
-function deleteUser(e) {
-    console.log(e);
+function deleteUser(userId) {
+    alert(`Deleting userid ${userId}`);
 }
 
-function editUser(e) {
-
+function editUser(userId) {
+    alert(`Editing userid ${userId}`);
 }

@@ -45,9 +45,18 @@ const getUserById = (id, callback) => {
     }
 }
 
+const getUserAll = (callback) => {
+    try {
+       db.all('SELECT * FROM users', [], callback) 
+    } catch (error) {
+        callback(error, null)
+    }
+}
+
 module.exports = {
     db,
     addUser,
     getUserByEmail,
-    getUserById
+    getUserById,
+    getUserAll
 };

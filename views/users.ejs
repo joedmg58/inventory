@@ -26,35 +26,23 @@
                         </thead>
 
                         <tbody>
+
+                            <% if(data) { data.forEach( (user, index) => { %>
+
                             <tr>
-                                <td>1</td>
-                                <td>Joed Machado</td>
-                                <td>joed.machado@kirisunamericas.com</td>
+                                <td><%= index + 1 %></td>
+                                <td><%= user.name %></td>
+                                <td><%= user.email %></td>
                                 <td class="fs-5">
-                                    <i class="actions text-primary bi bi-pencil-square"></i>
-                                    <i class="actions text-danger ms-2 bi bi-trash"></i>
+                                    <i class="actions text-primary bi bi-pencil-square" onclick="editUser('<%=user.id%>')"></i>
+                                    <i class="actions text-danger ms-2 bi bi-trash" onclick="deleteUser('<%=user.id%>')"></i>
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td>2</td>
-                                <td>Tech Support</td>
-                                <td>joed.machado@kirisun.com</td>
-                                <td class="fs-5">
-                                    <i class="actions text-primary bi bi-pencil-square"></i>
-                                    <i class="actions text-danger ms-2 bi bi-trash"></i>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>3</td>
-                                <td>Repairing</td>
-                                <td>workshop@kirisunamericas.com</td>
-                                <td class="fs-5">
-                                    <i class="actions text-primary bi bi-pencil-square" onclick="editUser(this)"></i>
-                                    <i class="actions text-danger ms-2 bi bi-trash" onclick="deleteUser(this)"></i>
-                                </td>
-                            </tr>
+                            <%}) } else { %>
+                                <tr><td colspan="4">NO DATA</td></tr>
+                            <%}%>
+                           
                         </tbody>
 
                     </table>
