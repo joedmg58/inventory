@@ -45,7 +45,9 @@ function editUser(e) {
 function fetchEditUser(e) {
     e.preventDefault();
 
-    const editUserEl = document.querySelector('#edit-user');
+    const editUserModal = new bootstrap.Modal( '#edit-user-modal' );
+    editUserModal.close();
 
+    const editUserEl = document.querySelector('#edit-user');
     console.log(editUserEl.dataset.userId);
 }
