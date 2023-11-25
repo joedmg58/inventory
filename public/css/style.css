@@ -50,6 +50,10 @@
     left: var(--sideBarWidthShort);
 }
 
+.content {
+    height: calc(100vh - var(--topBarHeight) - 30px );
+}
+
 .nav-link.active {
     color: var(--colorWhite);
 }
@@ -63,6 +67,14 @@
     background: var(--colorWhite);
     padding: 20px;
     border-radius: 10px;
+    max-height: calc(100vh - var(--topBarHeight) - 50px );
+    /* overflow-y: scroll; */
+}
+
+.table-container {
+    /* max-height: calc(100vh - var(--topBarHeight) - 100px ); */
+    height: 500px;
+    overflow-y: scroll;
 }
 
 .users table {

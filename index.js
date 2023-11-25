@@ -54,12 +54,6 @@ app.get('/attributes', checkAuthenticated, (req, res) => {
 });
 
 app.get('/users', checkAuthenticated, (req, res) => {
-    const users = [
-        {id: 1, name: 'Joed Machado', email: 'joed.machado@kirisunamericas.com', password: '340238032890398'},
-        {id: 2, name: 'Tech Support', email: 'joed.machado@kirisun.com', password: '340238032890398'},
-        {id: 3, name: 'Repairing', email: 'workshop@kirisunamericas.com', password: '340238032890398'},
-        {id: 4, name: 'Maintenance', email: 'handy_man@kirisunamericas.com', password: '340238032890398'},
-    ];
     db.getUserAll( (error, users) => {
         if (error) console.log(error);
         res.render('users.ejs', {title: 'KA Demo Inventory - Users', name: req.user.name, data: users})
@@ -105,6 +99,31 @@ app.delete('/logout', (req, res, next) => {
         res.redirect('/login');
     });
 })
+
+//API Routes
+app.get('/api/users', checkAuthenticated, (req, res) => {
+    db.getUserAll( (error, users) => {
+        if (error) return res.status(500).json({error: error});
+        res.status(200).json({data: users});
+    } );
+});
+
+app.post('/api/users', checkAuthenticated, async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const user = {
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword
+        }
+        const dbUser = db.addUser(user);
+        if (dbUser) res.status(200).json({message: 'User created succesfully.', data: dbUser});
+    } catch (error) {
+        res.status(500).json({message: 'Error creating user.'});
+    }
+
+    res.status(200).json({data: userId});
+});
 
 //Static route
 app.use(express.static(path.join(__dirname, 'public')));
