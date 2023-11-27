@@ -1,5 +1,6 @@
 //Initialize JsBarCode
-JsBarcode(".barcode", '123456', {height: 40, displayValue: false}).init();
+if (document.querySelector('.barcode') != null)
+    JsBarcode(".barcode", '123456', {height: 40, displayValue: false}).init();
 
 //Initialize BS Tooltips
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -30,14 +31,19 @@ const toggle = document.getElementById('menu-toggle');
 const sideBar = document.querySelector('.side-bar');
 const main = document.querySelector('.main');
 
-toggle.onclick = function() {
-    sideBar.classList.toggle('menu-toggle-active');
-    main.classList.toggle('menu-toggle-active');
+if(toggle !=null) {
+    toggle.onclick = function() {
+        sideBar.classList.toggle('menu-toggle-active');
+        main.classList.toggle('menu-toggle-active');
+    }
 }
 
 //Users
 const newUserModal = new bootstrap.Modal( '#new-user-modal' );
 const editUserModal = new bootstrap.Modal( '#edit-user-modal' );
+
+const deleteUserModalEl = document.querySelector('#delete-user-modal');
+const deleteUserModal = new bootstrap.Modal( deleteUserModalEl );
 
 const clearUsers = () => {
     const tableBody = document.querySelector('tbody');
@@ -99,9 +105,33 @@ function refreshUsers() {
 }
 
 function deleteUser(userId) {
-    // alert(`Deleting userid ${userId}`);
-    const deleteUserModal = new bootstrap.Modal( '#delete-user-modal' );
+    deleteUserModalEl.dataset.userId = userId;
     deleteUserModal.show();
+}
+
+function fetchDeleteUser() {
+    userId = deleteUserModalEl.dataset.userId;
+    console.log('deleting id', userId);
+    deleteUserModal.hide();
+    fetch('/api/users', {
+        method: 'DELETE',
+        body: JSON.stringify({userId: userId}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then( res => res.json())
+        .then( data => {
+            if (data.code === 200) {
+                refreshUsers();
+                return successMessage(data.message)
+            }
+            else return errorMessage(data.error)
+        })
+        .catch(error => {
+            errorMessage('Error creating new user.')
+        })
 }
 
 function editUser(e) {
@@ -163,7 +193,7 @@ function fetchNewUser(e) {
             addTableUser(user);
         })
         .catch(error => {
-            console.log(error);
+            errorMessage('Error creating new user.')
         })
 
     newUserModal.hide();

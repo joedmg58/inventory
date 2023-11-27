@@ -53,10 +53,19 @@ const getUserAll = (callback) => {
     }
 }
 
+const delUserById = (id, callback) => {
+    try {
+        db.run(`DELETE FROM users WHERE id = "${id}"`, [], callback)
+    } catch (error) {
+        callback(error, null);
+    }
+}
+
 module.exports = {
     db,
     addUser,
     getUserByEmail,
     getUserById,
-    getUserAll
+    getUserAll,
+    delUserById 
 };

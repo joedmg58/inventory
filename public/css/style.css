@@ -58,6 +58,13 @@
     color: var(--colorWhite);
 }
 
+/* ============== Toast Container ================= */
+.toast-container {
+    top: calc( var(--topBarHeight) + 10px );
+    left: 50%;
+    translate: 50%;
+}
+
 /* ================= Users ==================== */
 
 .users {

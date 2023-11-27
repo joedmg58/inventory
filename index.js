@@ -117,12 +117,18 @@ app.post('/api/users', checkAuthenticated, async (req, res) => {
             password: hashedPassword
         }
         const dbUser = db.addUser(user);
-        if (dbUser) res.status(200).json({message: 'User created succesfully.', data: dbUser});
+        if (dbUser) return res.status(200).json({code: 200, message: 'User created succesfully.', data: dbUser});
     } catch (error) {
-        res.status(500).json({message: 'Error creating user.'});
+        return res.status(500).json({code: 500, message: 'Error creating user.'});
     }
+});
 
-    res.status(200).json({data: userId});
+app.delete('/api/users', checkAuthenticated, (req, res) => {
+    const userId = req.body.userId;
+    db.delUserById(userId, function(error, row) {
+        if (error) return res.status(500).json({code:500, message: 'Error deleting user.'});
+        res.status(200).json({code: 200, message: 'User deleted succesfully'})
+    });
 });
 
 //Static route
