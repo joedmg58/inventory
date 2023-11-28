@@ -23,25 +23,21 @@
 
         
 
-<div class="container-fluid position-relative min-vh-100"
-    style="display: grid; grid-template-columns: 2fr 1fr;"
->
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
 
-    <div></div>
+        <div class="card shadow" style="min-width: 30em; max-width: 40em;">
 
-    <div class="position-relative">
-        
-        <div class="card shadow m-4 position-absolute top-50 start-0 translate-middle w-75">
             <div class="card-body">
                 <h3 class="card-title text-center">Sign In</h3>
 
-                <% if (messages.error) { %>
-                    <div><%= messages.error %></div>
-                <% } %> 
 
                 <form action="/login" method="post" class="p-4">
 
-                    <div class="form-floating mb-3">
+                    <% if (messages.error) { %>
+                        <div class="text-bg-danger px-2 rounded">Error: <%= messages.error %></div>
+                    <% } %>
+
+                    <div class="form-floating mt-3 mb-3">
                         <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" autocomplete="false">
                         <label for="email">Email address</label>
                     </div>
@@ -51,16 +47,14 @@
                         <label for="password">Password</label>
                     </div>
 
-                    <button class="btn btn-primary mt-4 px-3" type="submit">Login</button>
+                    <button class="btn btn-primary mt-4 px-3 w-100" type="submit">Login</button>
 
                 </form>
 
                 <a href="/register" class="px-4">Register</a>
             </div>
+
         </div>
-
-    </div>
-
 
 </div>
 
