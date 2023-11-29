@@ -3,9 +3,11 @@ const sideBar = document.querySelector('.side-bar');
 const content = document.querySelector('.content');
 const headerBar = document.querySelector('.header-bar');
 
+setTimeout( () => toggle.onclick(), 150 );
+
 toggle.onclick = function() {
     sideBar.classList.toggle('active');
-    headerBar.classList.toggle('active')
+    headerBar.classList.toggle('active');
 }
 
 window.onscroll = function() {

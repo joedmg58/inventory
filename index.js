@@ -101,6 +101,9 @@ app.delete('/logout', (req, res, next) => {
 })
 
 //API Routes
+
+    // ---- Users -----
+
 app.get('/api/users', checkAuthenticated, (req, res) => {
     db.getUserAll( (error, users) => {
         if (error) return res.status(500).json({error: error});
@@ -129,6 +132,26 @@ app.delete('/api/users', checkAuthenticated, (req, res) => {
         if (error) return res.status(500).json({code:500, message: 'Error deleting user.'});
         res.status(200).json({code: 200, message: 'User deleted succesfully'})
     });
+});
+
+    // ---- Attributes -----
+
+app.get('/api/attributes', checkAuthenticated, (req, res) => {
+    db.getAttributeAll( (error, attributes) => {
+        if (error) return res.json.status(500).json({code: 500, mesage: error});
+        res.status(200).json({code: 200, data: attributes});
+    })
+});
+
+app.post('/api/attributes', checkAuthenticated, (req, res) => {
+    const attribute = req.body.attribute;
+    try {
+        const newId = db.addAttribute(attribute);
+        if (newId) return res.status(200).json({code: 200, message:'Attribute created successfully', data: {id: newId, name: attribute}});
+        return res.status(500).json({code: 500, message: 'Error creating attribute.'});
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error creating attribute.'});
+    }
 });
 
 //Static route

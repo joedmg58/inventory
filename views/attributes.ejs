@@ -2,12 +2,20 @@
     
     <div class="container-fluid p-0 h-100">
 
-        <%- include('./partials/side-bar'); %>
-
-        <%- include('./partials/top-bar'); %>
+        <%- include('./partials/side-bar', {active: 'attributes'}); %>
 
         <div class="main">
-            <h3>Attributes</h3>
+
+            <%- include('./partials/top-bar'); %>
+
+            <div class="p-2">
+
+                <h3>Attributes</h3>
+
+                
+
+            </div>
+
         </div>
 
     </div>

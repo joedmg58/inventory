@@ -6,6 +6,11 @@
     --searchHeight: 48px;
 }
 
+.dropdown .dropdown-menu {
+    /* position: fixed !important; */
+    box-shadow: 0px 5px 5px -2px rgba(0,0,0,0.48);
+}
+
 .header-bar {
     position: fixed;
     z-index: 1000;
@@ -14,7 +19,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
     display: flex;
     align-items: center;
     justify-content: space-between;

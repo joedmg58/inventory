@@ -17,6 +17,8 @@ db.on("error", function(error) {
     console.log("Getting an error : ", error);
 }); 
 
+// Users
+
 const addUser = (user) => {
     const dbUser = {id: uuidv4(), ...user};
     const insQuery = `INSERT INTO users (id, name, email, password) VALUES ('${dbUser.id}', '${dbUser.name}', '${dbUser.email}', '${dbUser.password}');`
@@ -61,11 +63,35 @@ const delUserById = (id, callback) => {
     }
 }
 
+// Attibutes
+
+const getAttributeAll = (callback) => {
+    try {
+        db.all('SELECT * FROM attributes', [], callback)
+    } catch (error) {
+        callback(error);
+    }
+}
+
+const addAttribute = (attribute) => {
+    try {
+        db.run(`INSERT INTO attributes (name) VALUES "${attribute}"`, [], function(error) {
+            if (error) return null;
+            console.log(this);
+            return this.lastID;
+        })
+    } catch (error) {
+        return null;
+    }
+}
+
 module.exports = {
     db,
     addUser,
     getUserByEmail,
     getUserById,
     getUserAll,
-    delUserById 
+    delUserById,
+    getAttributeAll,
+    addAttribute
 };
