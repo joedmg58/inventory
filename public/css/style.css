@@ -123,3 +123,76 @@
 .users table tr td {
     padding: 10px;
 }
+
+/* ======================== Attributes ========================== */
+
+.attributes {
+    min-height: 500px;
+    width: calc(50% - 10px);
+    /* background: lightblue; */
+}
+
+.attributes:hover > .card-header {
+    background: lightblue;
+    /* color: var(--colorWhite); */
+}
+
+.attributes:hover  .btn {
+    background: lightblue;
+    border-color: lightblue;
+}
+
+.attributes table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.attributes table thead td {
+    font-weight: 600;
+}
+
+.attributes table tr {
+    color: var(--colorBlack1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.attributes table tbody tr:hover {
+    background: var(--colorBlue);
+    color: var(--colorYellowPale);
+}
+
+.attributes table tbody tr:hover .actions {
+    color: var(--colorYellowPale) !important;
+}
+
+.attributes table tbody tr .actions {
+    cursor: pointer;
+}
+
+.attributes table tr:last-child {
+    border-bottom: none;
+}
+
+.attributes table tr td:last-child {
+    text-align: end;
+}
+
+.attributes table tr td {
+    padding: 10px;
+}
+
+#table-attributes tbody tr {
+    cursor: pointer;
+}
+
+#table-attributes tbody tr.selected {
+    background: red;
+}
+
+@media only screen and (max-width: 1200px) {
+    .attributes,
+    .attribute-values {
+        min-width: 100%;
+    }
+}

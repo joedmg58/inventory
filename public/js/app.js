@@ -1,3 +1,5 @@
+console.log('app.js loaded');
+
 //Initialize JsBarCode
 if (document.querySelector('.barcode') != null)
     JsBarcode(".barcode", '123456', {height: 40, displayValue: false}).init();
@@ -39,11 +41,11 @@ if(toggle !=null) {
 }
 
 //Users
-const newUserModal = new bootstrap.Modal( '#new-user-modal' );
-const editUserModal = new bootstrap.Modal( '#edit-user-modal' );
+//const newUserModal = new bootstrap.Modal( '#new-user-modal' );
+//const editUserModal = new bootstrap.Modal( '#edit-user-modal' );
 
-const deleteUserModalEl = document.querySelector('#delete-user-modal');
-const deleteUserModal = new bootstrap.Modal( deleteUserModalEl );
+//const deleteUserModalEl = document.querySelector('#delete-user-modal');
+//const deleteUserModal = new bootstrap.Modal( deleteUserModalEl );
 
 const clearUsers = () => {
     const tableBody = document.querySelector('tbody');
@@ -233,3 +235,18 @@ function addTableUser(user) {
         row.append(col1, col2, col3, col4);
         tableBody.appendChild(row);
 }
+
+// Attributes
+
+const trTableAttributeList = document.querySelectorAll('#table-attributes tr');
+console.log('trTableAttributeList');
+console.log(trTableAttributeList);
+
+function activateAttribute() {
+    trTableAttributeList.forEach( item => item.classList.remove('selected'));
+    this.classList.add('selected');
+}
+
+if (trTableAttributeList) trTableAttributeList.forEach( item => item.addEventListener('click', activateAttribute));
+
+console.log('pingaaaa.....');

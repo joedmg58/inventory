@@ -50,7 +50,11 @@ app.get('/items', checkAuthenticated, (req, res) => {
 });
 
 app.get('/attributes', checkAuthenticated, (req, res) => {
-    res.render('attributes.ejs', {title: 'KA Demo Inventory - Attibutes', name: req.user.name})
+    db.getAttributeAll( (error, attributes) => {
+        if (error) return res.render('attributes.ejs', {title: 'KA Demo Inventory - Attibutes', name: req.user.name, data: null});
+        res.render('attributes.ejs', {title: 'KA Demo Inventory - Attibutes', name: req.user.name, data: attributes});
+    });
+    
 });
 
 app.get('/users', checkAuthenticated, (req, res) => {
