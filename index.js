@@ -158,6 +158,22 @@ app.post('/api/attributes', checkAuthenticated, (req, res) => {
     }
 });
 
+app.get('/api/attribute-values', checkAuthenticated, (req, res) => {
+    const query = req.query;
+    try {
+        if (query.id) {
+            db.getAttributeValuesByAttrId( query.id, (error, attrValues) => {
+                if(error) return res.status(500).json({code: 500, message: error});
+                return res.status(200).json({code:200, data: attrValues});
+            })
+        } else {
+            res.status(500).json({code: 500, message: 'No attribute id parameter provided.'});
+        }
+    } catch (error) {
+        res.status(500).json({code: 500, message: error});
+    }
+});
+
 //Static route
 app.use(express.static(path.join(__dirname, 'public')));
 

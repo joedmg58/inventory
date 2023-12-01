@@ -41,11 +41,11 @@ if(toggle !=null) {
 }
 
 //Users
-//const newUserModal = new bootstrap.Modal( '#new-user-modal' );
-//const editUserModal = new bootstrap.Modal( '#edit-user-modal' );
 
-//const deleteUserModalEl = document.querySelector('#delete-user-modal');
-//const deleteUserModal = new bootstrap.Modal( deleteUserModalEl );
+const newUserModal = document.querySelector('#new-user-modal') ? new bootstrap.Modal( '#new-user-modal' ) : null;
+const editUserModal = document.querySelector('#edit-user-modal') ? new bootstrap.Modal( '#edit-user-modal' ) : null;
+const deleteUserModalEl = document.querySelector('#delete-user-modal');
+const deleteUserModal = deleteUserModalEl ? new bootstrap.Modal( deleteUserModalEl ) : null;
 
 const clearUsers = () => {
     const tableBody = document.querySelector('tbody');
@@ -238,15 +238,66 @@ function addTableUser(user) {
 
 // Attributes
 
+let attributeSelected = {};
+
 const trTableAttributeList = document.querySelectorAll('#table-attributes tr');
-console.log('trTableAttributeList');
-console.log(trTableAttributeList);
+const attributeSelectedEl = document.querySelector('#attribute-selected');
 
 function activateAttribute() {
     trTableAttributeList.forEach( item => item.classList.remove('selected'));
     this.classList.add('selected');
+    attributeSelected = {
+        id: this.dataset.attrId,
+        name: this.dataset.attrName
+    }
+    attributeSelectedEl.innerHTML = `Values of attribute: ${attributeSelected.name}`;
+    refreshAttrValues();
 }
 
 if (trTableAttributeList) trTableAttributeList.forEach( item => item.addEventListener('click', activateAttribute));
 
-console.log('pingaaaa.....');
+function refreshAttrValues() {
+    //disable the refresh button
+
+    if (attributeSelected) {
+        //fetch the request
+        fetch(`/api/attribute-values?id=${attributeSelected.id}`)
+            .then( res => res.json())
+            .then( data => {
+                //clear old data
+                clearAttributeValues();
+                //show new data
+                fillTableAttributeValues(data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+    
+}
+
+function clearAttributeValues() {
+    const tableBody = document.querySelector('#table-attributes-values').querySelector('tbody');
+    tableBody.innerHTML = '';
+}
+
+function fillTableAttributeValues(items) {
+    if (items) {
+        const tableBody = document.querySelector('#table-attributes-values').querySelector('tbody');
+        items.forEach( (item, index) => {
+            const row = document.createElement('tr'); 
+            
+            const col1 = document.createElement('td');
+            col1.innerHTML = index + 1;
+            
+            const col2 = document.createElement('td');
+            col2.innerHTML = item.value;
+            
+            const col3 = document.createElement('td');
+            col3.innerHTML = '';
+            
+            row.append(col1, col2, col3);
+            tableBody.appendChild(row);
+        });
+    } 
+}

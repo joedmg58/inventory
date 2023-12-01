@@ -85,6 +85,19 @@ const addAttribute = (attribute) => {
     }
 }
 
+// Attribute Values
+
+const getAttributeValuesByAttrId = (attrId, callback) => {
+    let sqlQuery = '';
+    if (attrId) sqlQuery = `SELECT DISTINCT(value) FROM attribute_values WHERE attribute_id = ${attrId}`;
+    else callback({error: 'Missing attrId'})
+    try {
+        db.all(sqlQuery, [], callback)
+    } catch (error) {
+        callback(error);
+    }
+}
+
 module.exports = {
     db,
     addUser,
@@ -93,5 +106,6 @@ module.exports = {
     getUserAll,
     delUserById,
     getAttributeAll,
-    addAttribute
+    addAttribute,
+    getAttributeValuesByAttrId
 };
