@@ -67,7 +67,7 @@ const delUserById = (id, callback) => {
 
 const getAttributeAll = (callback) => {
     try {
-        db.all('SELECT * FROM attributes', [], callback)
+        db.all('SELECT * FROM attributes ORDER BY name', [], callback)
     } catch (error) {
         callback(error);
     }
@@ -89,7 +89,7 @@ const addAttribute = (attribute) => {
 
 const getAttributeValuesByAttrId = (attrId, callback) => {
     let sqlQuery = '';
-    if (attrId) sqlQuery = `SELECT DISTINCT(value) FROM attribute_values WHERE attribute_id = ${attrId}`;
+    if (attrId) sqlQuery = `SELECT DISTINCT id, value FROM attribute_values WHERE attribute_id = ${attrId} ORDER BY value`;
     else callback({error: 'Missing attrId'})
     try {
         db.all(sqlQuery, [], callback)

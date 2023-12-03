@@ -295,9 +295,108 @@ function fillTableAttributeValues(items) {
             
             const col3 = document.createElement('td');
             col3.innerHTML = '';
+
+            const col4 = document.createElement('td');
+            col4.classList.add('fs-5');
+
+            const icon1 = document.createElement('i');
+            icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
+            icon1.setAttribute('data-attr-value-id', item.id);
+            icon1.setAttribute('data-attr-value-value', item.value);
+            icon1.setAttribute('onclick', 'editAttrValue(this)');
+
+            const icon2 = document.createElement('i');
+            icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
+            icon2.setAttribute('onclick', `delAttrValue('${item.id}')`);
+
+
+            col4.append(icon1, icon2);
             
-            row.append(col1, col2, col3);
+            row.append(col1, col2, col3, col4);
             tableBody.appendChild(row);
         });
     } 
+}
+
+function addAttribute() {
+    document.querySelector('#btn-add-attr').disabled = true;
+
+    const tableBody = document.querySelector('#table-attributes').querySelector('tbody');
+    const rowCount = tableBody.querySelectorAll('tr').length;
+    const row = document.createElement('tr'); 
+    row.setAttribute('id', 'new-attr-row');
+    
+    const col1 = document.createElement('td');
+    col1.innerHTML = rowCount + 1;
+    
+    const col2 = document.createElement('td');
+    const formFloating1 = document.createElement('div');
+    formFloating1.classList.add('form-floating');
+    const input1 = document.createElement('input');
+    input1.classList.add('form-control');
+    input1.setAttribute('type', 'text');
+    input1.setAttribute('id', 'input-attribute');
+    input1.setAttribute('name', 'attribute');
+    input1.setAttribute('placeholder', 'Attribute name');
+    const label1 = document.createElement('label');
+    label1.setAttribute('for', 'input-attribute');
+    label1.innerHTML='Attribute name';
+    formFloating1.append(input1, label1);
+    col2.appendChild(formFloating1);
+
+    const col3 = document.createElement('td');
+    col3.classList.add('fs-5');
+    const icon1 = document.createElement('i');
+    icon1.classList.add('actions', 'text-primary', 'bi', 'bi-check2');
+    // icon1.setAttribute('data-attr-value-id', item.id);
+    // icon1.setAttribute('data-attr-value-value', item.value);
+    icon1.setAttribute('onclick', 'newAttribute()');
+    const icon2 = document.createElement('i');
+    icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-x-circle');
+    icon2.setAttribute('onclick', 'cancelNewAttribute()');
+    col3.append(icon1, icon2);
+    
+    row.append(col1, col2, col3);
+    tableBody.appendChild(row);
+
+    input1.focus();
+}
+
+function cancelNewAttribute() {
+    const newRow = document.querySelector('#new-attr-row');
+    newRow.remove();
+    document.querySelector('#btn-add-attr').disabled = false;
+}
+
+function newAttribute() {
+    //Get data from the form and convert to JSON format
+    const newAttrForm = document.querySelector('#form-attributes');
+    const formData = new FormData(newAttrForm);
+    const plainFormData = Object.fromEntries(formData.entries());
+    const formDataJsonString = JSON.stringify(plainFormData);
+
+    //fetch the request
+    fetch('/api/attributes', {
+        method: 'POST',
+        body: formDataJsonString,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then( res => res.json())
+        .then( data => {
+            //Add new attribute in the table
+            const message = data.message;
+            successMessage(message);
+            const attr = data.data;
+            addTableAttr(attr);
+        })
+        .catch(error => {
+            errorMessage('Error creating new attribute.')
+        })
+}
+
+function addTableAttr(attr) {
+
 }

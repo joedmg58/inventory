@@ -23,14 +23,14 @@
                             </div>
 
                             <div class="ms-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add new attribute">
-                                <button class="btn btn-light rounded-circle shadow-sm" onclick=""><i class="fs-5 bi bi-plus-circle"></i></button>
+                                <button id="btn-add-attr" class="btn btn-light rounded-circle shadow-sm" onclick="addAttribute()"><i class="fs-5 bi bi-plus-circle"></i></button>
                             </div>
 
                         </div>
 
                     </div>
 
-                    <div class="card-body">
+                    <form class="card-body" id="form-attributes"  method="post">
 
                         <table id="table-attributes">
                             <thead>
@@ -59,7 +59,7 @@
                             </tbody>
                         </table>
 
-                    </div>
+                    </form>
 
                 </div>
 
@@ -75,9 +75,9 @@
                                 <button class="btn btn-light rounded-circle shadow-sm" onclick="refreshAttrValues()"><i class="fs-5 bi bi-arrow-clockwise"></i></button>
                             </div>
 
-                            <!-- <div class="ms-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add new attribute value">
+                            <div class="ms-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add new attribute value">
                                 <button class="btn btn-light rounded-circle shadow-sm" onclick=""><i class="fs-5 bi bi-plus-circle"></i></button>
-                            </div> -->
+                            </div>
 
                         </div>
 
