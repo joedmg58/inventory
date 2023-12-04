@@ -259,7 +259,7 @@ if (trTableAttributeList) trTableAttributeList.forEach( item => item.addEventLis
 function refreshAttrValues() {
     //disable the refresh button
 
-    if (attributeSelected) {
+    if (attributeSelected.name) {
         //fetch the request
         fetch(`/api/attribute-values?id=${attributeSelected.id}`)
             .then( res => res.json())
@@ -272,6 +272,8 @@ function refreshAttrValues() {
             .catch(error => {
                 console.log(error);
             })
+    } else {
+        clearAttributeValues();
     }
     
 }
@@ -348,8 +350,6 @@ function addAttribute() {
     col3.classList.add('fs-5');
     const icon1 = document.createElement('i');
     icon1.classList.add('actions', 'text-primary', 'bi', 'bi-check2');
-    // icon1.setAttribute('data-attr-value-id', item.id);
-    // icon1.setAttribute('data-attr-value-value', item.value);
     icon1.setAttribute('onclick', 'newAttribute()');
     const icon2 = document.createElement('i');
     icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-x-circle');
@@ -416,6 +416,9 @@ function addTableAttr(attr) {
     const tableBody = document.querySelector('#table-attributes').querySelector('tbody');
     const rowCount = tableBody.querySelectorAll('tr').length;
     const row = document.createElement('tr'); 
+    row.setAttribute('data-attr-id', attr.id);
+    row.setAttribute('data-attr-name', attr.name);
+    row.setAttribute('data-attr-index', rowCount + 1);
     
     const col1 = document.createElement('td');
     col1.innerHTML = rowCount + 1;
@@ -427,12 +430,10 @@ function addTableAttr(attr) {
     col3.classList.add('fs-5');
     const icon1 = document.createElement('i');
     icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
-    icon1.setAttribute('data-attr-id', attr.id);
-    icon1.setAttribute('data-attr-name', attr.name);
     icon1.setAttribute('onclick', 'editAttribute(this)');
     const icon2 = document.createElement('i');
     icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
-    icon2.setAttribute('onclick', `deleteAttribute('${attr.id}')`);
+    icon2.setAttribute('onclick', `deleteAttribute(event, this)`);
     col3.append(icon1, icon2);
     
     row.append(col1, col2, col3);
@@ -459,24 +460,112 @@ function refreshAttributes() {
         })
 }
 
+let editInProgress = false;
+
 function editAttribute(el) {
-    
-    const attribute = { 
-        id: el.dataset.attrId,
-        name: el.dataset.attrName
-    }
+    if (editInProgress) return; 
+    else editInProgress = true;
 
     const tableRow = el.parentElement.parentElement;
     tableRow.innerHTML = '';
 
+    const attribute = { 
+        index: tableRow.dataset.attrIndex,
+        id: tableRow.dataset.attrId,
+        name: tableRow.dataset.attrName
+    }
+
     const col1 = document.createElement('td');
-    col1.innerHTML = 'n';
+    col1.innerHTML = attribute.index;
 
     const col2 = document.createElement('td');
-    col2.innerHTML = '';
+    const formFloating1 = document.createElement('div');
+    formFloating1.classList.add('form-floating');
+    const input1 = document.createElement('input');
+    input1.classList.add('form-control');
+    input1.setAttribute('type', 'text');
+    input1.setAttribute('id', 'input-attribute');
+    input1.setAttribute('name', 'attribute');
+    input1.setAttribute('placeholder', 'Attribute name');
+    input1.value = attribute.name;
+    const label1 = document.createElement('label');
+    label1.setAttribute('for', 'input-attribute');
+    label1.innerHTML='Attribute name';
+    formFloating1.append(input1, label1);
+    col2.appendChild(formFloating1);
 
     const col3 = document.createElement('td');
-    col3.innerHTML = '';
+    col3.classList.add('fs-5');
+    const icon1 = document.createElement('i');
+    icon1.classList.add('actions', 'text-primary', 'bi', 'bi-check2');
+    icon1.setAttribute('onclick', 'fetchEditAttribute(this)');
+    const icon2 = document.createElement('i');
+    icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-x-circle');
+    icon2.setAttribute('onclick', 'cancelEditAttribute(this)');
+    col3.append(icon1, icon2);
 
     tableRow.append(col1, col2, col3);
+    input1.focus();
+}
+
+function cancelEditAttribute(el) {
+    editInProgress = false;
+
+    const tableRow = el.parentElement.parentElement;
+    tableRow.innerHTML = '';
+
+    const attribute = { 
+        index: tableRow.dataset.attrIndex,
+        id: tableRow.dataset.attrId,
+        name: tableRow.dataset.attrName
+    }
+    
+    const col1 = document.createElement('td');
+    col1.innerHTML = attribute.index;
+    
+    const col2 = document.createElement('td');
+    col2.innerHTML = attribute.name;
+    
+    const col3 = document.createElement('td');
+    col3.classList.add('fs-5');
+    const icon1 = document.createElement('i');
+    icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
+    icon1.setAttribute('onclick', 'editAttribute(this)');
+    const icon2 = document.createElement('i');
+    icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
+    icon2.setAttribute('onclick', `deleteAttribute(event, this)`);
+    col3.append(icon1, icon2);
+    
+    tableRow.append(col1, col2, col3);
+}
+
+function fetchEditAttribute(el) {
+    //fecth new value to API
+    //update the value set new value to dataset on the element
+    cancelEditAttribute(el);
+}
+
+function deleteAttribute(event, el) {
+    event.stopPropagation();
+
+    const tableRow = el.parentElement.parentElement;
+
+    const attribute = { 
+        index: tableRow.dataset.attrIndex,
+        id: tableRow.dataset.attrId,
+        name: tableRow.dataset.attrName
+    }
+
+    if (window.confirm(`Do you want to delete the attribute named\n${attribute.name}`)) {
+        //fetch to API
+
+        tableRow.remove();
+
+        if (attributeSelected.name === attribute.name) {
+            attributeSelected = {};
+            attributeSelectedEl.innerHTML = '[No attribute selected]';
+            refreshAttrValues();
+        }
+        
+    }
 }

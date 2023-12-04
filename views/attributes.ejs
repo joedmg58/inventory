@@ -46,12 +46,12 @@
                             <tbody>
                                 <% if(data) { data.forEach( (attribute, index) => { %>
 
-                                    <tr data-attr-id="<%=attribute.id%>" data-attr-name="<%=attribute.name%>">
+                                    <tr  data-attr-index="<%=index+1%>"  data-attr-id="<%=attribute.id%>" data-attr-name="<%=attribute.name%>" >
                                         <td><%= index + 1 %></td>
                                         <td><%= attribute.name %></td>
                                         <td class="fs-5">
-                                            <i class="actions text-primary bi bi-pencil-square" data-attr-id="<%=attribute.id%>" data-attr-name="<%=attribute.name%>"  onclick="editAttribute(this)"></i>
-                                            <i class="actions text-danger ms-2 bi bi-trash" onclick="deleteAttribute('<%=attribute.id%>')"></i>
+                                            <i class="actions text-primary bi bi-pencil-square" onclick="editAttribute(this)"></i>
+                                            <i class="actions text-danger ms-2 bi bi-trash" onclick="deleteAttribute(event, this)"></i>
                                         </td>
                                     </tr>
     
