@@ -388,15 +388,95 @@ function newAttribute() {
         .then( data => {
             //Add new attribute in the table
             const message = data.message;
-            successMessage(message);
-            const attr = data.data;
-            addTableAttr(attr);
+            const code = data.code;
+
+            if (code === 200) {
+                successMessage(message);
+                const attr = data.data;
+
+                cancelNewAttribute();
+
+                addTableAttr(attr);
+            } else {
+                errorMessage(message);
+            }
+            
         })
         .catch(error => {
-            errorMessage('Error creating new attribute.')
+            errorMessage('Error creating new attribute.');
         })
 }
 
-function addTableAttr(attr) {
+function clearTableAttributes() {
+    const tableBody = document.querySelector('#table-attributes').querySelector('tbody');
+    tableBody.innerHTML = '';
+}
 
+function addTableAttr(attr) {
+    const tableBody = document.querySelector('#table-attributes').querySelector('tbody');
+    const rowCount = tableBody.querySelectorAll('tr').length;
+    const row = document.createElement('tr'); 
+    
+    const col1 = document.createElement('td');
+    col1.innerHTML = rowCount + 1;
+    
+    const col2 = document.createElement('td');
+    col2.innerHTML = attr.name;
+    
+    const col3 = document.createElement('td');
+    col3.classList.add('fs-5');
+    const icon1 = document.createElement('i');
+    icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
+    icon1.setAttribute('data-attr-id', attr.id);
+    icon1.setAttribute('data-attr-name', attr.name);
+    icon1.setAttribute('onclick', 'editAttribute(this)');
+    const icon2 = document.createElement('i');
+    icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
+    icon2.setAttribute('onclick', `deleteAttribute('${attr.id}')`);
+    col3.append(icon1, icon2);
+    
+    row.append(col1, col2, col3);
+    tableBody.appendChild(row);
+}
+
+function refreshAttributes() {
+    fetch('/api/attributes', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then( res => res.json())
+        .then( data => {
+            if (data.code === 200){
+                clearTableAttributes();
+                data.data.forEach( attribute => addTableAttr(attribute) );
+            }
+        })
+        .catch(error => {
+            errorMessage('Error refreshing attributes.');
+        })
+}
+
+function editAttribute(el) {
+    
+    const attribute = { 
+        id: el.dataset.attrId,
+        name: el.dataset.attrName
+    }
+
+    const tableRow = el.parentElement.parentElement;
+    tableRow.innerHTML = '';
+
+    const col1 = document.createElement('td');
+    col1.innerHTML = 'n';
+
+    const col2 = document.createElement('td');
+    col2.innerHTML = '';
+
+    const col3 = document.createElement('td');
+    col3.innerHTML = '';
+
+    tableRow.append(col1, col2, col3);
 }

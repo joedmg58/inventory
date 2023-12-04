@@ -10,6 +10,8 @@
 
             <div class="p-3 d-flex flex-wrap" style="gap: 20px;">
 
+                <%- include('./partials/toasts'); %>
+
                 <div class="attributes card shadow">
                     
                     <div class="card-header d-flex justify-content-between">
@@ -19,7 +21,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             
                             <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Refresh">
-                                <button class="btn btn-light rounded-circle shadow-sm" onclick=""><i class="fs-5 bi bi-arrow-clockwise"></i></button>
+                                <button class="btn btn-light rounded-circle shadow-sm" onclick="refreshAttributes()"><i class="fs-5 bi bi-arrow-clockwise"></i></button>
                             </div>
 
                             <div class="ms-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add new attribute">
@@ -30,7 +32,7 @@
 
                     </div>
 
-                    <form class="card-body" id="form-attributes"  method="post">
+                    <form class="card-body" id="form-attributes"  method="post" onsubmit="event.preventDefault()">
 
                         <table id="table-attributes">
                             <thead>

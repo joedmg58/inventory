@@ -73,15 +73,13 @@ const getAttributeAll = (callback) => {
     }
 }
 
-const addAttribute = (attribute) => {
+const addAttribute = (attribute, callback) => {
     try {
-        db.run(`INSERT INTO attributes (name) VALUES "${attribute}"`, [], function(error) {
-            if (error) return null;
-            console.log(this);
-            return this.lastID;
+            db.run(`INSERT INTO attributes (name) VALUES ("${attribute}")`, [], function(error) {
+            callback(error, this);
         })
     } catch (error) {
-        return null;
+        callback(error, null);
     }
 }
 

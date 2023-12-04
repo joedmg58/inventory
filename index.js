@@ -14,6 +14,7 @@ const methodOverride = require('method-override');
 const PORT = 5000;
 
 const initializePassport = require('./modules/passport-config');
+const { Statement } = require('sqlite3');
 initializePassport(passport, db.getUserByEmail, db.getUserById);
 
 const app = express();
@@ -149,10 +150,15 @@ app.get('/api/attributes', checkAuthenticated, (req, res) => {
 
 app.post('/api/attributes', checkAuthenticated, (req, res) => {
     const attribute = req.body.attribute;
+
+    console.log(`POST /api/attributes | attribute: ${attribute}`);
+
     try {
-        const newId = db.addAttribute(attribute);
-        if (newId) return res.status(200).json({code: 200, message:'Attribute created successfully', data: {id: newId, name: attribute}});
-        return res.status(500).json({code: 500, message: 'Error creating attribute.'});
+        db.addAttribute(attribute, function(error, statement) {
+            if (error) return res.status(500).json({code: 500, message: 'Error creating attribute. No id returned.'});
+            return res.status(200).json({code: 200, message:'Attribute created successfully', data: {id: statement.lastID, name: attribute}});
+        });
+
     } catch (error) {
         res.status(500).json({code: 500, message: 'Error creating attribute.'});
     }
