@@ -83,6 +83,22 @@ const addAttribute = (attribute, callback) => {
     }
 }
 
+const editAttribute = (attribute, callback) => {
+    try {
+        db.run(`UPDATE attributes SET name = "${attribute.name}" WHERE id = "${attribute.id}"`, [], function(error) {callback(error, this)})
+    } catch (error) {
+        callback(error, null);
+    }
+}
+
+const delAttribute = (id, callback) => {
+    try {
+        db.run(`DELETE FROM attributes WHERE id = "${id}"`, [], function(error) {callback(error, this)})
+    } catch (error) {
+        callback(error, null);
+    }
+}
+
 // Attribute Values
 
 const getAttributeValuesByAttrId = (attrId, callback) => {
@@ -105,5 +121,7 @@ module.exports = {
     delUserById,
     getAttributeAll,
     addAttribute,
+    editAttribute,
+    delAttribute,
     getAttributeValuesByAttrId
 };

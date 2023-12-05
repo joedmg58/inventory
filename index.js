@@ -164,6 +164,48 @@ app.post('/api/attributes', checkAuthenticated, (req, res) => {
     }
 });
 
+app.put('/api/attributes', checkAuthenticated, (req, res) => {
+    const attribute = {
+        id: req.body.id,
+        name: req.body.attribute
+    }
+
+    console.log(`PUT /api/attributes | id: ${attribute.id}, name: ${attribute.name}`);
+
+    try {
+        db.editAttribute(attribute, function(error, statement) {
+
+            console.log('statement: ', statement);
+
+            if (error) return res.status(500).json({code: 500, message: 'Error modifying attribute.'});
+            return res.status(200).json({code: 200, message:'Attribute modified successfully', data: statement});
+        })
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error deleting attribute.'});
+    }
+});
+
+app.delete('/api/attributes', checkAuthenticated, (req, res) => {
+    const attribute = {
+        id: req.body.id,
+        name: req.body.name
+    }
+
+    console.log(`DELETE /api/attributes | id: ${attribute.id}, name: ${attribute.name}`);
+
+    try {
+        db.delAttribute(attribute.id, function(error, statement) {
+
+            console.log('statement: ', statement);
+
+            if (error) return res.status(500).json({code: 500, message: 'Error deleting attribute.'});
+            return res.status(200).json({code: 200, message:'Attribute deleted successfully', data: statement});
+        })
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error deleting attribute.'});
+    }
+});
+
 app.get('/api/attribute-values', checkAuthenticated, (req, res) => {
     const query = req.query;
     try {

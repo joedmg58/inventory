@@ -46,11 +46,11 @@
                             <tbody>
                                 <% if(data) { data.forEach( (attribute, index) => { %>
 
-                                    <tr  data-attr-index="<%=index+1%>"  data-attr-id="<%=attribute.id%>" data-attr-name="<%=attribute.name%>" >
+                                    <tr  data-attr-index="<%=index+1%>"  data-attr-id="<%=attribute.id%>" data-attr-name="<%=attribute.name%>" onclick="activateAttribute(this)">
                                         <td><%= index + 1 %></td>
                                         <td><%= attribute.name %></td>
                                         <td class="fs-5">
-                                            <i class="actions text-primary bi bi-pencil-square" onclick="editAttribute(this)"></i>
+                                            <i class="actions text-primary bi bi-pencil-square" onclick="editAttribute(event, this)"></i>
                                             <i class="actions text-danger ms-2 bi bi-trash" onclick="deleteAttribute(event, this)"></i>
                                         </td>
                                     </tr>
@@ -69,7 +69,7 @@
 
                     <div class="card-header d-flex justify-content-between">
                         
-                        <h3 id="attribute-selected">Values of atribute: [no attribute selected]</h3>
+                        <h3 id="attribute-selected">No attribute selected</h3>
 
                         <div class="d-flex justify-content-between align-items-center">
                             
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="ms-3" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Add new attribute value">
-                                <button class="btn btn-light rounded-circle shadow-sm" onclick=""><i class="fs-5 bi bi-plus-circle"></i></button>
+                                <button class="btn btn-light rounded-circle shadow-sm" onclick="newAttrVal()"><i class="fs-5 bi bi-plus-circle"></i></button>
                             </div>
 
                         </div>
@@ -112,4 +112,10 @@
 
     </div>
 
-<%- include('./partials/foot'); %>
+    <%- include('./partials/foot'); %>
+
+    <script src="/js/attributes.js"></script>
+
+</body>
+
+</html>
