@@ -254,7 +254,7 @@ function activateAttribute() {
     refreshAttrValues();
 }
 
-if (trTableAttributeList) trTableAttributeList.forEach( item => item.addEventListener('click', activateAttribute));
+//if (trTableAttributeList) trTableAttributeList.forEach( item => item.addEventListener('click', activateAttribute));
 
 function refreshAttrValues() {
     //disable the refresh button
