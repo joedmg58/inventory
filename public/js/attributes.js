@@ -51,10 +51,9 @@ function fillTableAttributeValues(items) {
         const tableBody = document.querySelector('#table-attributes-values').querySelector('tbody');
         items.forEach( (item, index) => {
             const row = document.createElement('tr'); 
-            row.setAttribute('onclick', 'activateAttribute(this)');
             row.setAttribute('data-attr-value-id', item.id);
             row.setAttribute('data-attr-value-value', item.value);
-            row.setAttribute('data-attr-index', index+1);
+            row.setAttribute('data-attr-value-index', index+1);
             
             const col1 = document.createElement('td');
             col1.innerHTML = index + 1;
@@ -63,10 +62,7 @@ function fillTableAttributeValues(items) {
             col2.innerHTML = item.value;
             
             const col3 = document.createElement('td');
-            col3.innerHTML = '';
-
-            const col4 = document.createElement('td');
-            col4.classList.add('fs-5');
+            col3.classList.add('fs-5');
 
             const icon1 = document.createElement('i');
             icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
@@ -76,10 +72,9 @@ function fillTableAttributeValues(items) {
             icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
             icon2.setAttribute('onclick', `delAttrValue(this)`);
 
-
-            col4.append(icon1, icon2);
+            col3.append(icon1, icon2);
             
-            row.append(col1, col2, col3, col4);
+            row.append(col1, col2, col3);
             tableBody.appendChild(row);
         });
     } 
@@ -387,10 +382,114 @@ function deleteAttribute(event, el) {
 
 // =============== Attribute Values ===========================
 
-function newAttrValRow() {
+var attrValueEditing = false;
+
+function newAttrValRow(tblBody) {
+    const rowCount = tblBody.querySelectorAll('tr').length;
     const tr = document.createElement('tr');
+    tr.dataset.attrValueIndex = rowCount + 1;
+
+    const td1 = document.createElement('td');
+    td1.innerHTML = rowCount + 1;
+
+    const td2 = document.createElement('td');
+
+    const div = document.createElement('div');
+    div.classList.add('form-floating');
+
+    const input = document.createElement('input');
+    input.classList.add('form-control');
+    input.setAttribute('type', 'text');
+    input.setAttribute('id', 'input-attribute-value');
+    input.setAttribute('name', 'value');
+    input.setAttribute('placeholder', 'Attribute value');
+
+    const label = document.createElement('label');
+    label.setAttribute('for', 'input-attribute-value');
+    label.innerHTML='Attribute value';
+
+    div.append(input, label);
+    td2.appendChild(div);
+
+    const td3 = document.createElement('td');
+    
+    td3.classList.add('fs-5');
+    const i1 = document.createElement('i');
+    i1.classList.add('actions', 'text-success', 'bi', 'bi-check2');
+    i1.setAttribute('onclick', 'fetchAttributeValue(event, this)');
+    const i2 = document.createElement('i');
+    i2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-x-circle');
+    i2.setAttribute('onclick', 'cancelNewAttrValue(this)');
+    
+    td3.append(i1, i2);
+
+    tr.append(td1, td2, td3);
+    tblBody.appendChild(tr);
+
+    input.focus();
+}
+
+function resetAttrValueView(el, attrVal) {
+    const tr = el.parentElement.parentElement;
+    tr.innerHTML = '';
+
+    const td1 = document.createElement('td');
+    td1.innerHTML = tr.dataset.attrValueIndex;
+
+    const td2 = document.createElement('td');
+    td2.innerHTML = attrVal;
+
+    const td3 = document.createElement('td');
+    const i1 = document.createElement('i');
+    i1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
+    i1.setAttribute('onclick', '');
+    const i2 = document.createElement('i');
+    i2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
+    i2.setAttribute('onclick', '');
+    
+    td3.append(i1, i2);
+
+    tr.append(td1, td2, td3);
+
+    attrValueEditing = false;
+}
+
+function cancelNewAttrValue(el) {
+    el.parentElement.parentElement.remove();
+    attrValueEditing = false;
+}
+
+function fetchAttributeValue(e, el) {
+    e.stopPropagation();
+
+    const tr = el.parentElement.parentElement;
+
+    const currentValue = {
+        index: tr.dataset.attrValueIndex,
+        id: tr.dataset.attrValueId,
+        value: tr.dataset.attrValueValue
+    }
+
+    const form = document.querySelector('#form-attribute-values');
+    const formData = new FormData(form);
+
+    const newValue = {
+        index: tr.dataset.attrValueIndex,
+        id: tr.dataset.attrValueId,
+        value: formData.get('value')
+    }
+
+
+    console.log(currentValue);
+    console.log(newValue);
+
+    resetAttrValueView(el, formData.get('value'));
 }
 
 function newAttrVal() {
-    const tableBody = document.querySelector('#table-attributes-values tbody')
+    if (attrValueEditing) return;
+    if (!attributeSelected.name) return;
+    attrValueEditing = true;
+    const tableBody = document.querySelector('#table-attributes-values tbody');
+    newAttrValRow(tableBody);
 }
