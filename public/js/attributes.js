@@ -412,7 +412,6 @@ function newAttrValRow(tblBody) {
     td2.appendChild(div);
 
     const td3 = document.createElement('td');
-    
     td3.classList.add('fs-5');
     const i1 = document.createElement('i');
     i1.classList.add('actions', 'text-success', 'bi', 'bi-check2');
@@ -429,23 +428,74 @@ function newAttrValRow(tblBody) {
     input.focus();
 }
 
+function editAttrValRow(row) {
+    const attrVal = {
+        index: row.dataset.attrValueIndex,
+        id: row.dataset.attrValueId,
+        value: row.dataset.attrValueValue
+    }
+
+    row.innerHTML = '';
+
+    const td1 = document.createElement('td');
+    td1.innerHTML = attrVal.index;
+
+    const td2 = document.createElement('td');
+
+    const div = document.createElement('div');
+    div.classList.add('form-floating');
+
+    const input = document.createElement('input');
+    input.classList.add('form-control');
+    input.setAttribute('type', 'text');
+    input.setAttribute('id', 'input-attribute-value');
+    input.setAttribute('name', 'value');
+    input.setAttribute('value', attrVal.value);
+    input.setAttribute('placeholder', 'Attribute value');
+
+    const label = document.createElement('label');
+    label.setAttribute('for', 'input-attribute-value');
+    label.innerHTML='Attribute value';
+
+    div.append(input, label);
+    td2.appendChild(div);
+
+    const td3 = document.createElement('td');
+    td3.classList.add('fs-5');
+    const i1 = document.createElement('i');
+    i1.classList.add('actions', 'text-success', 'bi', 'bi-check2');
+    i1.setAttribute('onclick', 'fetchAttributeValue(event, this)');
+    const i2 = document.createElement('i');
+    i2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-x-circle');
+    i2.setAttribute('onclick', 'cancelEditAttrValue(this)');
+    
+    td3.append(i1, i2);
+
+    row.append(td1, td2, td3);
+
+    input.focus();
+}
+
 function resetAttrValueView(el, attrVal) {
     const tr = el.parentElement.parentElement;
     tr.innerHTML = '';
+    tr.dataset.attrValueId = attrVal.id;
+    tr.dataset.attrValueValue = attrVal.value;
 
     const td1 = document.createElement('td');
     td1.innerHTML = tr.dataset.attrValueIndex;
 
     const td2 = document.createElement('td');
-    td2.innerHTML = attrVal;
+    td2.innerHTML = attrVal.value;
 
     const td3 = document.createElement('td');
+    td3.classList.add('fs-5');
     const i1 = document.createElement('i');
     i1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
-    i1.setAttribute('onclick', '');
+    i1.setAttribute('onclick', 'editAttrValue(this)');
     const i2 = document.createElement('i');
     i2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
-    i2.setAttribute('onclick', '');
+    i2.setAttribute('onclick', 'delAttrValue(this)');
     
     td3.append(i1, i2);
 
@@ -467,7 +517,8 @@ function fetchAttributeValue(e, el) {
     const currentValue = {
         index: tr.dataset.attrValueIndex,
         id: tr.dataset.attrValueId,
-        value: tr.dataset.attrValueValue
+        value: tr.dataset.attrValueValue,
+        attribute_id: attributeSelected.id
     }
 
     const form = document.querySelector('#form-attribute-values');
@@ -476,14 +527,66 @@ function fetchAttributeValue(e, el) {
     const newValue = {
         index: tr.dataset.attrValueIndex,
         id: tr.dataset.attrValueId,
-        value: formData.get('value')
+        value: formData.get('value'),
+        attribute_id: attributeSelected.id
     }
 
 
-    console.log(currentValue);
-    console.log(newValue);
+    if (!currentValue.id) {
+        //creating new attribute value
+        fetch('/api/attribute-values', {
+            method: 'POST',
+            body: JSON.stringify(newValue),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then( res => res.json())
+            .then( data => {
+                if (data.code === 200){
+                    //if fetch succeed
+                    resetAttrValueView(el, newValue); 
+                } else {
+                    //if fail, remove row.
+                    tr.remove();
+                }
+            })
+            .catch(error => {
+                errorMessage('Error creating attribute value.');
+                
+            })
+    } else {
+        //editing existing attribute value
+        fetch('/api/attribute-values', {
+            method: 'PUT',
+            body: JSON.stringify(newValue),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then( res => res.json())
+            .then( data => {
+                if (data.code === 200){
+                    //if fetch succeed
+                    resetAttrValueView(el, newValue); 
+                } else {
+                    //if fail, restore to previous value
+                    resetAttrValueView(el, currentValue);
+                }
+            })
+            .catch(error => {
+                errorMessage('Error creating attribute value.');
+                //if fail, restore to previous value
+                resetAttrValueView(el, currentValue);
+            })
 
-    resetAttrValueView(el, formData.get('value'));
+        attrValueEditing = false;
+        
+    }
+
+    
 }
 
 function newAttrVal() {
@@ -492,4 +595,26 @@ function newAttrVal() {
     attrValueEditing = true;
     const tableBody = document.querySelector('#table-attributes-values tbody');
     newAttrValRow(tableBody);
+}
+
+function editAttrValue(el) {
+    if (attrValueEditing) return;
+    attrValueEditing = true;
+
+    const tr = el.parentElement.parentElement;
+    editAttrValRow(tr);
+}
+
+function delAttrValue(el) {
+    const tr = el.parentElement.parentElement;
+
+    const attrVal = { 
+        index: tr.dataset.attrValueIndex,
+        id: tr.dataset.attrValueId,
+        value: tr.dataset.attrValueValue
+    }
+
+    if (window.confirm(`Do you want to delete the attribute value\n${attrVal.value}`)) {
+        //fetch delete
+    }
 }

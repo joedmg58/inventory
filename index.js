@@ -24,7 +24,8 @@ app.use(flash());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {_expires: 1000 * 60 * 60 } //expires in one hour
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -219,6 +220,59 @@ app.get('/api/attribute-values', checkAuthenticated, (req, res) => {
         }
     } catch (error) {
         res.status(500).json({code: 500, message: error});
+    }
+});
+
+app.post('/api/attribute-values', checkAuthenticated, (req, res) => {
+    const attributeVal = {
+        attribute_id: req.body.attribute_id,
+        value: req.body.value
+    }   
+
+    console.log(`POST /api/attribute-values | attributeValue: ${{attribute_id: attributeVal.attribute_id, value: attributeVal.value}}`); 
+
+    try {
+        db.addAttrVal(attributeVal, function(error, statement) {
+            if (error) return res.status(500).json({code: 500, message: 'Error creating attribute value. No id returned.', error: error.message});
+            return res.status(200).json({code: 200, message:'Attribute value created successfully', data: {id: statement.lastID, value: attributeVal.value, attribute_id: attributeVal.attribute_id}});
+        });
+
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error creating attribute value.'});
+    }
+});
+
+app.put('/api/attribute-values', checkAuthenticated, (req, res) => {
+    const attributeVal = {
+        id: req.body.id,
+        value: req.body.value,
+    }   
+
+    console.log(`PUT /api/attribute-values | Attribute Value ID: ${attributeVal.id}`); 
+
+    try {
+        db.editAttrVal(attributeVal, function(error, statement) {
+            if (error) return res.status(500).json({code: 500, message: 'Error editing attribute value. No id returned.', error: error.message});
+            return res.status(200).json({code: 200, message:'Attribute value edited successfully', data: {id: statement.lastID, value: attributeVal.value, attribute_id: attributeVal.attribute_id}});
+        });
+
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error editing attribute value.'});
+    }
+});
+
+app.delete('/api/attribute-values', checkAuthenticated, (req, res) => {
+    const attrValId = req.body.id;
+
+    console.log(`DELETE /api/attibute-values | ID: ${attrValId}`);
+
+    try {
+        db.delAttrVal(attrValId, function(error, statement) {
+            if (error) return res.status(500).json({code: 500, message: 'Error deleting attribute value. No id returned.', error: error.message});
+            return res.status(200).json({code: 200, message:'Attribute value deleted successfully', data: {id: statement.lastID}});
+        })
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error deleting attribute value.'});
     }
 });
 
