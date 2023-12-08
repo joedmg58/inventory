@@ -616,5 +616,22 @@ function delAttrValue(el) {
 
     if (window.confirm(`Do you want to delete the attribute value\n${attrVal.value}`)) {
         //fetch delete
+        fetch('/api/attribute-values', {
+            method: 'DELETE',
+            body: JSON.stringify({id:attrVal.id}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then( res => res.json())
+            .then( data => {
+                if (data.code === 200){
+                   tr.remove();
+                }
+            })
+            .catch(error => {
+                errorMessage('Error deleting attribute value.');
+            })
     }
 }

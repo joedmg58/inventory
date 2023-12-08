@@ -39,3 +39,23 @@ if(toggle !=null) {
         main.classList.toggle('menu-toggle-active');
     }
 }
+
+//Form elements
+
+const createFormFloatingInputEl = (id, type, name, labelTxt) => {
+    const formFloating = document.createElement('div');
+    formFloating.classList.add('form-floating');
+
+    const input = document.createElement('input');
+    input.classList.add('form-control');
+    input.setAttribute('type', type);
+    input.setAttribute('id', id);
+    input.setAttribute('name', name);
+    input.setAttribute('placeholder', labelTxt);
+
+    const label = document.createElement('label');
+    label.setAttribute('for', id);
+    label.innerHTML= labelTxt;
+
+    return formFloating;
+}

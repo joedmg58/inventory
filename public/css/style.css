@@ -207,3 +207,59 @@
         min-width: 100%;
     }
 }
+
+/* ========================= Items ======================== */
+
+.items {
+    min-height: 500px;
+    width: calc(100% - 10px);
+}
+
+
+.items table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.items table thead td {
+    font-weight: 600;
+}
+
+.items table tr {
+    color: var(--colorBlack1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.items table tbody tr:hover {
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px var(--colorBack1);
+}
+
+.items table tbody tr .actions {
+    cursor: pointer;
+}
+
+.items table tr:last-child {
+    border-bottom: none;
+}
+
+.items table tr td:last-child {
+    text-align: end;
+}
+
+.items table tr td {
+    padding: 10px;
+}
+
+#table-items tbody tr {
+    cursor: pointer;
+}
+
+#table-items tbody tr.selected {
+    background: rgba(35, 87, 230, 0.08);
+}
+
+#table-items tbody tr.selected:hover {
+    color: blue;
+}
