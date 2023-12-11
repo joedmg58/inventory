@@ -276,6 +276,26 @@ app.delete('/api/attribute-values', checkAuthenticated, (req, res) => {
     }
 });
 
+//Items
+
+app.get('/api/items', checkAuthenticated, (req, res) => {})
+
+app.post('/api/items', checkAuthenticated, (req, res) => {
+    const item = {
+        sku: req.body.sku,
+        name: req.body.name,
+        description: req.body.description
+    }
+
+    res.status(200).json({code: 200, data: item});
+})
+
+app.put('/api/items', checkAuthenticated, (req, res) => {})
+
+app.delete('/api/items', checkAuthenticated, (req, res) => {})
+
+
+
 //Static route
 app.use(express.static(path.join(__dirname, 'public')));
 

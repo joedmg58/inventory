@@ -138,6 +138,32 @@ const delAttrVal = (id, callback) => {
     }
 }
 
+//Items
+
+const getItemAll = (callback) => {
+    try {
+        db.all('SELECT * FROM items ORDER BY name', [], callback)
+    } catch (error) {
+        callback(error);
+    }
+}
+
+const addItem = (item, callback) => {
+    const dbItem = {id: uuidv4(), ...item};
+    try {
+        db.run(`INSERT INTO items (id, sku, name, description) VALUES ("${dbItem.id}", "${dbItem.sku}", "${dbItem.name}", "${dbItem.description}")`, [], 
+            function(error) {
+                callback(error, this);
+            });
+    } catch (error) {
+        callback(error, null);
+    }
+}
+
+const editItem = (item, callback) => {}
+
+const delItem = (id, callback) => {}
+
 module.exports = {
     db,
     addUser,
@@ -152,5 +178,9 @@ module.exports = {
     getAttributeValuesByAttrId,
     addAttrVal,
     editAttrVal,
-    delAttrVal
+    delAttrVal,
+    getItemAll,
+    addItem,
+    editItem,
+    delItem
 };

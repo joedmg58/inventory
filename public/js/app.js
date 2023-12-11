@@ -57,5 +57,35 @@ const createFormFloatingInputEl = (id, type, name, labelTxt) => {
     label.setAttribute('for', id);
     label.innerHTML= labelTxt;
 
+    formFloating.append(input, label);
     return formFloating;
+}
+
+const createTableRowWithFields = (index, object, editFunc, delFunc) => {
+    const tr = document.createElement('tr');
+
+    const col1 = document.createElement('td');
+    col1.innerHTML = index;
+    tr.appendChild(col1);
+
+    for ( const [key, value] of Object.entries(object)) {
+        tr.appendChild( document.createElement('td').innerHTML = value );
+    }
+
+    coln = document.createElement('td');
+    coln.classList.add('fs-5');
+
+    const icon1 = document.createElement('i');
+    icon1.classList.add('actions', 'text-primary', 'bi', 'bi-pencil-square');
+    icon1.setAttribute('onclick', editFunc);
+
+    const icon2 = document.createElement('i');
+    icon2.classList.add('actions', 'text-danger', 'ms-2', 'bi', 'bi-trash');
+    icon2.setAttribute('onclick', delFunc);
+
+    coln.append(icon1, icon2);
+
+    tr.appendChild(coln);
+
+    return tr;
 }
