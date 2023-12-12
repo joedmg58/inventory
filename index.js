@@ -48,7 +48,10 @@ app.get('/inventory', checkAuthenticated, (req, res) => {
 });
 
 app.get('/items', checkAuthenticated, (req, res) => {
-    res.render('items.ejs', {title: 'KA Demo Inventory - Items', name: req.user.name})
+    db.getItemAll( (error, items) => {
+        if (error) return res.render('attributes.ejs', {title: 'KA Demo Inventory - Items', name: req.user.name, data: null});
+        res.render('items.ejs', {title: 'KA Demo Inventory - Items', name: req.user.name, data: items})
+    })
 });
 
 app.get('/attributes', checkAuthenticated, (req, res) => {
@@ -287,7 +290,17 @@ app.post('/api/items', checkAuthenticated, (req, res) => {
         description: req.body.description
     }
 
-    res.status(200).json({code: 200, data: item});
+    console.log('POST /api/items');
+
+    try {
+        db.addItem(item, function(error, statement) {
+            if (error) return res.status(500).json({code: 500, message: 'Error creating item. No id returned.', error: error.message});
+            return res.status(200).json({code: 200, message:'Item created successfully', data: {id: statement.lastID, ...item}});
+        })
+    } catch (error) {
+        res.status(500).json({code: 500, message: 'Error creating item.', error: error.message});
+    }
+
 })
 
 app.put('/api/items', checkAuthenticated, (req, res) => {})

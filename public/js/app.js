@@ -68,8 +68,13 @@ const createTableRowWithFields = (index, object, editFunc, delFunc) => {
     col1.innerHTML = index;
     tr.appendChild(col1);
 
+    console.log(object);
+
     for ( const [key, value] of Object.entries(object)) {
-        tr.appendChild( document.createElement('td').innerHTML = value );
+        console.log(key, value);
+        let td = document.createElement('td');
+        td.innerHTML = value;
+        tr.appendChild( td );
     }
 
     coln = document.createElement('td');
@@ -89,3 +94,5 @@ const createTableRowWithFields = (index, object, editFunc, delFunc) => {
 
     return tr;
 }
+
+
