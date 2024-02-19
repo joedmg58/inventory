@@ -44,7 +44,7 @@ function addItemToTable(item) {
     const tb = document.querySelector('#table-items tbody');
     const rowCount = tb.querySelectorAll('tr').length;
 
-    const tr = createTableRowWithFields(rowCount+1, item, 'editItem(this)', 'delItem(this)');
+    const tr = createTableRowWithFields(rowCount+1, item, 'editItem(this)', 'delItem(this)'); 
     tb.appendChild(tr);
 }
 
@@ -95,23 +95,35 @@ function newItem() {
         }) 
 }
 
-function delItem(el) {
-    const tr = el.parentElement.parentElement;
-    const item = {
-        index: tr.dataset.itemIndex,
-        id: tr.dataset.itemId,
-        sku: tr.dataset.itemSku,
-        name: tr.dataset.itemName,
-        description: tr.dataset.itemDescription
-    }
-}
+// function delItem(el) {
+//     const tr = el.parentElement.parentElement;
+//     const item = {
+//         index: tr.dataset.itemIndex,
+//         id: tr.dataset.itemId,
+//         sku: tr.dataset.itemSku,
+//         name: tr.dataset.itemName,
+//         description: tr.dataset.itemDescription
+//     }
+// }
 
 const deleteDialog = document.getElementById('delete-dialog');
 if (deleteDialog) {
-    deleteDialog.addEventListener('show.bs.modal', event => {
+
+    function showBsModal(event) {
         const button = event.relatedTarget;
         const tr = button.parentElement.parentElement;
         const text = document.querySelector('#delete-dialog .dialog-text');
-        text.innerHTML = `Do you want to delete the item ${tr.dataset.itemName} ?`
-    });
+        text.innerHTML = `Do you want to delete the item ${tr.dataset.itemName} ?`;
+
+        deleteDialog.removeEventListener('show.bs.modal', showBsModal);
+    }
+
+    function hideBsModal(event) {
+        const button = event.relatedTarget;
+        console.log(event);
+    }
+    
+    deleteDialog.addEventListener('show.bs.modal', showBsModal);
+    deleteDialog.addEventListener('hidden.bs.modal', hideBsModal);
+
 }
